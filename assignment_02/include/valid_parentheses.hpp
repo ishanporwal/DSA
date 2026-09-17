@@ -4,6 +4,12 @@
 #include "stack.hpp"
 #include <unordered_map>
 
+/**
+ * Checks whether a string has balanced parentheses, brackets, and braces.
+ *
+ * @param s The string to validate.
+ * @return true if all opening and closing delimiters are properly matched; otherwise false.
+ */
 bool isValidParentheses(const std::string& s) {
     std::unordered_map<char, char> map = {
         {'}' , '{'},
