@@ -4,7 +4,17 @@ I implemented traditional matrix multiplication and Strassen's algorithm, then a
 
 ### Benchmarks
 
-I tested square matrices of different sizes and compared traditional multiplication against hybrid Strassen using thresholds of 32, 64, and 128. These are the average runtimes over 10 runs in milliseconds...
+I first tested traditional multiplication against Strassen without a switching threshold. These are the runtimes from my initial Release build, in milliseconds...
+
+| Matrix size | Traditional | Strassen |
+|---|---:|---:|
+| 8 | 0.0011 | 0.3199 |
+| 16 | 0.0064 | 1.8883 |
+| 32 | 0.0432 | 12.7091 |
+| 64 | 0.4072 | 94.2748 |
+| 128 | 3.2099 | 647.839 |
+
+Since Strassen was significantly slower, I then tested a hybrid approach using thresholds of 32, 64, and 128. These are the average runtimes over 10 runs using a Release build, in milliseconds...
 
 | Matrix size | Traditional | Threshold 32 | Threshold 64 | Threshold 128 |
 |---|---:|---:|---:|---:|
@@ -15,11 +25,11 @@ I tested square matrices of different sizes and compared traditional multiplicat
 
 ### Performance Analysis
 
-With smaller matrix sizes, the traditional multiplication was generally faster. Although Strassen theoretically has better time complexity, it still has extra overhead due to splitting matrices, creating temporary matrices, and then making recursive calls. That overhead isn't really worth it for smaller inputs.
+In my initial benchmark testing, the traditional multiplication was much faster than Strassen at every tested size. Although Strassen theoretically has better time complexity, it still has extra overhead due to splitting matrices, creating temporary matrices, and then making recursive calls. That overhead isn't really worth it for smaller inputs, especially when recursively splitting all the way down to 1x1 matrices.
 
-However, at larger matrices, the hybrid approach started performing better. At a size of 256, using a threshold of 64 was about 14% faster than traditional multiplication. At a size of 512, it was about 24% faster.
+However, after implementing the hybrid approach, Strassen started performing better at larger matrix sizes. At a size of 256, using a threshold of 64 was about 14% faster than traditional multiplication. At a size of 512, it was about 24% faster.
 
-Based on all these results, **64** seems like the best switching threshold for my implementation. This means that using traditional multiplication for matrices of size 64 or smaller and Strassen for larger matrices is usually ideal. The differences at smaller sizes were pretty small, and obviously exact times can vary, hence this is the best threshold from the sizes I tested rather than an end-all-be-all cutoff.
+Based on these results, **64** seems like the best switching threshold for my implementation. This means using traditional multiplication for matrices of size 64 or smaller and Strassen for larger matrices. Traditional multiplication was still generally faster for smaller matrices, but the hybrid approach became more beneficial as the matrix size increased. The exact times can vary between runs, so 64 is the best threshold from the sizes I tested rather than a universal cutoff.
 
 ## Part 3: DNA Sequence Alignment
 
